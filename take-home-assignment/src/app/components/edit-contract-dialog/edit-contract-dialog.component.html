@@ -8,7 +8,49 @@
 </div>
 
 <mat-dialog-content>
-    <p>Here is a form to edit a contract.</p>
+    <form [formGroup]="form" class="edit-contract-form">
+        <div class="stack-container">
+
+        <div class="form-row">
+        <mat-label class="label" for="statusField">Status</mat-label>
+        <mat-form-field class="field" id="statusField" appearance="outline">
+            <mat-select placeholder="Choose an option..." formControlName="status">
+                <mat-option [value]="null">All</mat-option>
+                <mat-option *ngFor="let status of statuses$ | async" [value]="status.name">{{ status.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+        <mat-label class="label" for="contractTypeField">Contract Type</mat-label>
+        <mat-form-field class="field" id="contractTypeField" appearance="outline">
+            <mat-select placeholder="Choose an option..." formControlName="contractType">
+                <mat-option [value]="null">All</mat-option>
+                <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+    
+        <div class="form-row">
+        <mat-label class="label" for="startDateField">Start Date</mat-label>
+        <mat-form-field class="field" id="startDateField" appearance="outline">
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+        </div>
+    
+        <div class="form-row">
+        <mat-label class="label" for="endDateField">End Date</mat-label>
+        <mat-form-field class="field" id="endDateField" appearance="outline">
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+        </div>
+
+    </div>
+    </form>    
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">

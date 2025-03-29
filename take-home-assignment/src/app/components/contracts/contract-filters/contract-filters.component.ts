@@ -22,7 +22,8 @@ export class ContractFiltersComponent implements OnInit {
 
     public form: FormGroup = this.fb.group({});
 
-    constructor(private fb: FormBuilder, private enumService: EnumService) {}
+    constructor(private fb: FormBuilder, 
+        private enumService: EnumService) {}
 
     ngOnInit(): void {
         this.statuses$ = this.enumService.getContractStatuses();

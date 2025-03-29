@@ -20,3 +20,34 @@
 .primary-button {
     background: $primary;
 }
+
+.edit-contract-form {
+    display: flex;
+    align-items: left;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stack-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+.label {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.field {
+    align-items: right;
+    flex: 1;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    flex: 1; 
+    min-width: 250px; 
+  }
