@@ -7,7 +7,32 @@
         </mat-select>
     </mat-form-field>
 
+    <mat-form-field appearance="outline">
+        <mat-label>Contract Type</mat-label>
+        <mat-select formControlName="contractType">
+            <mat-option [value]="null">All</mat-option>
+            <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="Start Date (mm/dd/yyyy)">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker [disabled]="false"></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" placeholder="End Date (mm/dd/yyyy)">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker [disabled]="false"></mat-datepicker>
+    </mat-form-field>
+    
+
     <div class="filter-buttons">
         <button mat-raised-button color="accent" class="apply-button" (click)="applyFilters()">Apply</button>
+    </div>
+
+    <div class="filter-buttons">
+        <button mat-raised-button color="accent" class="remove-button" (click)="removeFilters()">Remove All</button>
     </div>
 </form>

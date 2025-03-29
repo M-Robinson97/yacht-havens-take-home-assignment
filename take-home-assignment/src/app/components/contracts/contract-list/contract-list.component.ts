@@ -70,8 +70,7 @@ export class ContractListComponent implements OnInit {
                 cellRendererFramework: ContractTypeCellRendererComponent,
                 minWidth: 120,
                 width: 120,
-                maxWidth: 120,
-                suppressFilter: true,
+                maxWidth: 120
             },
             {
                 field: 'contractStatus',
@@ -96,40 +95,42 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'startDate',
                 headerName: 'Start Date',
-                valueGetter: (params) => {
-                    return this.dateService.formatDateToString(params.data.startDate)
-                },
+                valueGetter: (params) =>
+                    new Date(params.data.startDate),
+                cellRenderer: (params) =>
+                    this.dateService.formatDateToText(params.data.startDate),
+                filter: 'agDateColumnFilter'
             },
             {
                 field: 'endDate',
                 headerName: 'End Date',
-                valueGetter: (params) => {
-                    return this.dateService.formatDateToString(params.data.endDate)
-                },
+                valueGetter: (params) =>
+                    new Date(params.data.endDate), 
+                cellRenderer: (params) => 
+                    this.dateService.formatDateToText(params.data.endDate),
+                filter: 'agDateColumnFilter'
             },
             {
                 field: 'durationInDays',
                 headerName: 'Duration in Days',
-                valueGetter: (params) => {
-                    const startDate = params.data.startDate;
-                    const endDate = params.data.endDate;
-                    return this.dateService.getContractDurationInDays(startDate, endDate);
-                }
+                valueGetter: (params) =>
+                    this.dateService.getContractDurationInDays(params.data.startDate, params.data.endDate),
+                filter: 'agNumberColumnFilter'
             },
             {
                 field: 'totalIncVat',
                 headerName: 'Total Inc VAT',
-                valueGetter: (params) => {
-                    const contractCurrency = params.data.currency;
-                    const formattedVatAmount = Intl.NumberFormat('en-US').format(params.data.totalIncVat);
-                    return `${contractCurrency} ${formattedVatAmount}`
-                }
+                valueGetter:  'data.totalIncVat',   
+                cellRenderer: (params) => 
+                    Intl.NumberFormat('en-Uk', { style: 'currency', currency: params.data.currency}).format(params.data.totalIncVat),
+                filter: 'agNumberColumnFilter'
             },
             {
                 field: 'deleteAction',
                 headerName: 'Delete',
                 cellRendererFramework: DeleteActionCellRendererComponent,
                 suppressFilter: true,
+                suppressSorting: true
             }
             
         ];

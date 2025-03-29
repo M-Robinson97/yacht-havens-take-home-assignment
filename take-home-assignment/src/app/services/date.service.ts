@@ -12,19 +12,25 @@ export class DateService {
     return moment(endDate).diff(moment(startDate), 'days');
   }
 
-  public formatDateToString(date: Date) {
+  public formatDateToText(date: string): string {
     const dateMoment = moment(date);
 
-    if(!dateMoment.isValid()) return;
+    if(!dateMoment.isValid()) return '';
 
     const day = dateMoment.date();     
     const month = dateMoment.format('MMMM');
     const year = dateMoment.year();
     
     const formattedDate = `${day}${this.getDaySuffix(day)} ${month} ${year}`;
-    console.log(date);
-    console.log(formattedDate);
+
     return formattedDate;
+  }
+
+  public compareStringsByDay(firstDateString: string, secondDateString: string) {
+    const firstDate = moment(firstDateString);
+    const secondDate = moment(secondDateString);
+
+    return firstDate.isValid() && secondDate.isValid() && firstDate.isSame(secondDate, 'day');
   }
 
   private getDaySuffix(day: number) {
