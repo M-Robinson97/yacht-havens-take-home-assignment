@@ -24,14 +24,14 @@ export class QuoteService {
         return of(totalValue).pipe(delay(1000));
     }
 
+    public getContractDuration(startDate: string, endDate: string): number {
+        return moment(endDate).diff(moment(startDate), 'days');
+    }
+
     private isValidDateRange(startDate: string, endDate: string): boolean {
         const start = moment(startDate);
         const end = moment(endDate);
         return start.isValid() && end.isValid() && end.isAfter(start, 'day');
-    }
-
-    private getContractDuration(startDate: string, endDate: string): number {
-        return moment(endDate).diff(moment(startDate), 'days');
     }
 
     private getDailyRate(contractType: ContractType): number {
