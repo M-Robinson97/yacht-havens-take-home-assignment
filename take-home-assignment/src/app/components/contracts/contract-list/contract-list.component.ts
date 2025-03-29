@@ -5,6 +5,7 @@ import { ColDef, GridApi, GridOptions, GridReadyEvent, RowDataChangedEvent } fro
 import { ContractTypeCellRendererComponent } from '../cell-renderers/contract-type-cell-renderer/contract-type-cell-renderer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-contract-dialog.component';
+import { QuoteService } from 'src/app/services/quote.service';
 
 @Component({
     selector: 'app-contract-list',
@@ -17,7 +18,9 @@ export class ContractListComponent implements OnInit {
     public gridOptions: GridOptions = this.getGridOptions();
     private gridApi!: GridApi;
 
-    constructor(private contractsService: ContractsService, private dialog: MatDialog) {}
+    constructor(private contractsService: ContractsService, private dialog: MatDialog,
+        private quoteService: QuoteService
+    ) {}
 
     ngOnInit(): void {}
 
@@ -69,6 +72,11 @@ export class ContractListComponent implements OnInit {
                 suppressFilter: true,
             },
             {
+                field: 'contractStatus',
+                headerName: 'Contract Status',
+                valueGetter: 'data.contractStatus',
+            },
+            {
                 field: 'customerName',
                 headerName: 'Customer Name',
                 valueGetter: 'data.customerName',
@@ -93,6 +101,29 @@ export class ContractListComponent implements OnInit {
                 headerName: 'End Date',
                 valueGetter: 'data.endDate',
             },
+            {
+                field: 'durationInDays',
+                headerName: 'Duration in Days',
+                valueGetter: (params) => {
+                    const startDate = params.data.startDate;
+                    const endDate = params.data.endDate;
+                    return this.quoteService.getContractDuration(startDate, endDate);
+                }
+            },
+            {
+                field: 'totalIncVat',
+                headerName: 'Total Inc VAT',
+                valueGetter: (params) => {
+                    return `${params.data.currency} ${params.data.totalIncVat}`
+                }
+            },
+            {
+                field: 'deleteAction',
+                headerName: 'Delete Action',
+                cellRenderer: function(params) {
+                    return `<button class="delete-btn">🗑️</button>`; // For testing purposes
+                  }
+            }
         ];
     }
 
