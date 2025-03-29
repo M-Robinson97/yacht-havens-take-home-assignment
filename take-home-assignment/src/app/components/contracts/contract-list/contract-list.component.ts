@@ -119,12 +119,14 @@ export class ContractListComponent implements OnInit {
                 field: 'totalIncVat',
                 headerName: 'Total Inc VAT',
                 valueGetter: (params) => {
-                    return `${params.data.currency} ${params.data.totalIncVat}`
+                    const contractCurrency = params.data.currency;
+                    const formattedVatAmount = Intl.NumberFormat('en-US').format(params.data.totalIncVat);
+                    return `${contractCurrency} ${formattedVatAmount}`
                 }
             },
             {
                 field: 'deleteAction',
-                headerName: 'Delete Action',
+                headerName: 'Delete',
                 cellRendererFramework: DeleteActionCellRendererComponent,
                 suppressFilter: true,
             }
