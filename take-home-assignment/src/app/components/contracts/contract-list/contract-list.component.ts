@@ -121,7 +121,8 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'totalIncVat',
                 headerName: 'Total Inc VAT',
-                valueGetter: (params) => {
+                valueGetter: 'data.totalIncVat',   
+                cellRenderer: (params) => {
                     const contractCurrency = params.data.currency;
                     const formattedVatAmount = Intl.NumberFormat('en-US').format(params.data.totalIncVat);
                     return `${contractCurrency} ${formattedVatAmount}`
