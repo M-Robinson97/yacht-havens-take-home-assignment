@@ -1,0 +1,27 @@
+@import 'variables';
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+::ng-deep .mat-form-field-outline {
+    background: white !important;
+    border-radius: 5px;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+
+.filter-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.apply-button {
+    background: $primary;
+    color: white;
+}

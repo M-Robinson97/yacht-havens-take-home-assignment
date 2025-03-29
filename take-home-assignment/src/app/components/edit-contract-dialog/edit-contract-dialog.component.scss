@@ -1,0 +1,22 @@
+@import 'variables';
+
+.dialog-toolbar {
+    background: $primary;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: -24px;
+    margin-top: -24px;
+    width: calc(100% + 48px);
+}
+
+.dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.primary-button {
+    background: $primary;
+}

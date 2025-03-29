@@ -1,0 +1,57 @@
+@import 'variables';
+
+.contract-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    box-shadow: 0 0 0 10px $ag-grid-box-shadow-bg;
+    border-radius: 10px;
+}
+
+.ag-theme-material {
+    border: 1px solid $border-colour;
+    border-radius: $border-radius;
+}
+
+::ng-deep .ag-theme-material .ag-header {
+    background-color: $ag-grid-header-bg;
+}
+
+::ng-deep .ag-theme-material .ag-header .ag-header-cell-text {
+    color: $primary;
+}
+
+::ng-deep .ag-header-cell {
+    line-height: 50px !important;
+    cursor: pointer;
+}
+
+::ng-deep .ag-header-cell-label {
+    font-weight: 600;
+}
+
+::ng-deep .ag-header-cell-menu-button {
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+::ng-deep .ag-root {
+    background: $ag-grid-root-bg;
+    border-radius: $border-radius;
+}
+
+::ng-deep .ag-row {
+    background: $ag-grid-row-bg;
+
+    &:hover {
+        background: $ag-grid-row-bg-hover;
+    }
+}
+
+::ng-deep .ag-cell {
+    display: flex;
+    align-items: center;
+    line-height: 40px !important;
+}
