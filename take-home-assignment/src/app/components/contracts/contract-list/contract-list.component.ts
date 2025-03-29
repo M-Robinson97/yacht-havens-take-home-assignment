@@ -133,6 +133,7 @@ export class ContractListComponent implements OnInit {
                 headerName: 'Delete',
                 cellRendererFramework: DeleteActionCellRendererComponent,
                 suppressFilter: true,
+                suppressSorting: true
             }
             
         ];
