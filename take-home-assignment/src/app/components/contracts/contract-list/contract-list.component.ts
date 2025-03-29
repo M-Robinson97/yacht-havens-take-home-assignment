@@ -6,6 +6,7 @@ import { ContractTypeCellRendererComponent } from '../cell-renderers/contract-ty
 import { MatDialog } from '@angular/material/dialog';
 import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-contract-dialog.component';
 import { QuoteService } from 'src/app/services/quote.service';
+import { DeleteActionCellRendererComponent } from '../cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
 
 @Component({
     selector: 'app-contract-list',
@@ -120,10 +121,10 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'deleteAction',
                 headerName: 'Delete Action',
-                cellRenderer: function(params) {
-                    return `<button class="delete-btn">🗑️</button>`; // For testing purposes
-                  }
+                cellRendererFramework: DeleteActionCellRendererComponent,
+                suppressFilter: true,
             }
+            
         ];
     }
 
