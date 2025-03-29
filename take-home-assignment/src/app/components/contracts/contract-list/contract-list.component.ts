@@ -70,8 +70,7 @@ export class ContractListComponent implements OnInit {
                 cellRendererFramework: ContractTypeCellRendererComponent,
                 minWidth: 120,
                 width: 120,
-                maxWidth: 120,
-                suppressFilter: true,
+                maxWidth: 120
             },
             {
                 field: 'contractStatus',
