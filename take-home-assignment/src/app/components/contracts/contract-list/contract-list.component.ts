@@ -96,16 +96,18 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'startDate',
                 headerName: 'Start Date',
-                valueGetter: (params) => {
+                valueGetter: 'data.startDate',
+                cellRenderer: (params) => {
                     return this.dateService.formatDateToString(params.data.startDate)
-                },
+                }
             },
             {
                 field: 'endDate',
                 headerName: 'End Date',
-                valueGetter: (params) => {
+                valueGetter: 'data.endDate',
+                cellRenderer: (params) => {
                     return this.dateService.formatDateToString(params.data.endDate)
-                },
+                }
             },
             {
                 field: 'durationInDays',

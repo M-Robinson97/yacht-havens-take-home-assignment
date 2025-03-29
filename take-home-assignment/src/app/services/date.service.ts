@@ -12,18 +12,17 @@ export class DateService {
     return moment(endDate).diff(moment(startDate), 'days');
   }
 
-  public formatDateToString(date: Date) {
+  public formatDateToString(date: Date): string {
     const dateMoment = moment(date);
 
-    if(!dateMoment.isValid()) return;
+    if(!dateMoment.isValid()) return '';
 
     const day = dateMoment.date();     
     const month = dateMoment.format('MMMM');
     const year = dateMoment.year();
     
     const formattedDate = `${day}${this.getDaySuffix(day)} ${month} ${year}`;
-    console.log(date);
-    console.log(formattedDate);
+
     return formattedDate;
   }
 
