@@ -49,6 +49,7 @@ export class ContractFiltersComponent implements OnInit {
     }
 
     public removeFilters(): void {
+        this.form.reset();
         this.filtersChanged.emit();
     }
 }
