@@ -5,8 +5,8 @@ import { ColDef, GridApi, GridOptions, GridReadyEvent, RowDataChangedEvent } fro
 import { ContractTypeCellRendererComponent } from '../cell-renderers/contract-type-cell-renderer/contract-type-cell-renderer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-contract-dialog.component';
-import { QuoteService } from 'src/app/services/quote.service';
 import { DeleteActionCellRendererComponent } from '../cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
+import { DateService } from 'src/app/services/date.service';
 
 @Component({
     selector: 'app-contract-list',
@@ -20,7 +20,7 @@ export class ContractListComponent implements OnInit {
     private gridApi!: GridApi;
 
     constructor(private contractsService: ContractsService, private dialog: MatDialog,
-        private quoteService: QuoteService
+        private dateService: DateService
     ) {}
 
     ngOnInit(): void {}
@@ -95,12 +95,16 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'startDate',
                 headerName: 'Start Date',
-                valueGetter: 'data.startDate',
+                valueGetter: (params) => {
+                    return this.dateService.formatDateToString(params.data.startDate)
+                },
             },
             {
                 field: 'endDate',
                 headerName: 'End Date',
-                valueGetter: 'data.endDate',
+                valueGetter: (params) => {
+                    return this.dateService.formatDateToString(params.data.endDate)
+                },
             },
             {
                 field: 'durationInDays',
@@ -108,7 +112,7 @@ export class ContractListComponent implements OnInit {
                 valueGetter: (params) => {
                     const startDate = params.data.startDate;
                     const endDate = params.data.endDate;
-                    return this.quoteService.getContractDuration(startDate, endDate);
+                    return this.dateService.getContractDurationInDays(startDate, endDate);
                 }
             },
             {
