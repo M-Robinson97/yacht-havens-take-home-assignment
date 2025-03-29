@@ -13,12 +13,15 @@ export class ContractsService {
     constructor() {}
 
     public getContracts(params: Partial<GetContractsParams> = {}): Observable<Contract[]> {
-        const { status } = params;
+        const { status, contractType } = params;
 
         return of(this.contracts).pipe(
             delay(1000),
             mergeMap((contracts) => from(contracts)),
-            filter((contract) => this.filterByStatus(contract, status)),
+            filter((contract) =>  
+                this.filterByStatus(contract, status)
+                && this.filterByContractType(contract, contractType)
+            ),
             toArray()
         );
     }
@@ -26,6 +29,11 @@ export class ContractsService {
     private filterByStatus(contract: Contract, status?: string): boolean {
         if (!status) return true;
         return contract.contractStatus === status;
+    }
+
+    private filterByContractType(contract: Contract, contractType?: string): boolean {
+        if (!contractType) return true;
+        return contract.contractType === contractType;
     }
 
     public deleteContract(id: number): Observable<void> {

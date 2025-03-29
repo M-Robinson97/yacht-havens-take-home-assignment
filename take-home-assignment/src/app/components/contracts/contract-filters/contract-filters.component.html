@@ -7,6 +7,14 @@
         </mat-select>
     </mat-form-field>
 
+    <mat-form-field appearance="outline">
+        <mat-label>Contract Type</mat-label>
+        <mat-select formControlName="contractType">
+            <mat-option [value]="null">All</mat-option>
+            <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
     <div class="filter-buttons">
         <button mat-raised-button color="accent" class="apply-button" (click)="applyFilters()">Apply</button>
     </div>
