@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-contract-dialog.component';
 import { DeleteActionCellRendererComponent } from '../cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
 import { DateService } from 'src/app/services/date.service';
+import { ContractStatusCellRendererComponent } from '../cell-renderers/contract-status-cell-renderer/contract-status-cell-renderer.component';
 
 @Component({
     selector: 'app-contract-list',
@@ -75,7 +76,7 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'contractStatus',
                 headerName: 'Contract Status',
-                valueGetter: 'data.contractStatus',
+                cellRendererFramework: ContractStatusCellRendererComponent
             },
             {
                 field: 'customerName',
