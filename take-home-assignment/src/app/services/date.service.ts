@@ -26,6 +26,13 @@ export class DateService {
     return formattedDate;
   }
 
+  public compareStringsByDay(firstDateString: string, secondDateString: string) {
+    const firstDate = moment(firstDateString);
+    const secondDate = moment(secondDateString);
+
+    return firstDate.isValid() && secondDate.isValid() && firstDate.isSame(secondDate, 'day');
+  }
+
   private getDaySuffix(day: number) {
     if (day > 3 && day < 21) return 'th';
     switch (day % 10) {

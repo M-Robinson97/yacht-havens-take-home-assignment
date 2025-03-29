@@ -17,6 +17,9 @@ export class ContractFiltersComponent implements OnInit {
 
     public statuses$!: Observable<EnumView<ContractStatus>[]>;
     public contractTypes$!: Observable<EnumView<ContractType>[]>;
+    public startDate: string = '';
+    public endDate: string = '';
+
     public form: FormGroup = this.fb.group({});
 
     constructor(private fb: FormBuilder, private enumService: EnumService) {}
@@ -30,14 +33,18 @@ export class ContractFiltersComponent implements OnInit {
     private addControls(): void {
         this.form.addControl('status', this.fb.control(null));
         this.form.addControl('contractType', this.fb.control(null));
+        this.form.addControl('startDate', this.fb.control(null));
+        this.form.addControl('endDate', this.fb.control(null));
     }
 
     public applyFilters(): void {
-        const { status, contractType } = this.form.value;
+        const { status, contractType, startDate, endDate } = this.form.value;
 
         this.filtersChanged.emit({
             status: status || undefined,
-            contractType: contractType || undefined
+            contractType: contractType || undefined,
+            startDate: startDate || undefined,
+            endDate: endDate || undefined
         });
     }
 
