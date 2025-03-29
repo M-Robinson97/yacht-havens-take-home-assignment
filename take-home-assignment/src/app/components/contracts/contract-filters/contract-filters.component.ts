@@ -35,4 +35,8 @@ export class ContractFiltersComponent implements OnInit {
             status: status || undefined,
         });
     }
+
+    public removeFilters(): void {
+        this.filtersChanged.emit();
+    }
 }
