@@ -18,6 +18,8 @@ import { ContractTypeCellRendererComponent } from './components/contracts/cell-r
 import { EditContractDialogComponent } from './components/edit-contract-dialog/edit-contract-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { DeleteActionCellRendererComponent } from './components/contracts/cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
+import { ContractStatusCellRendererComponent } from './components/contracts/cell-renderers/contract-status-cell-renderer/contract-status-cell-renderer.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +29,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         ContractListComponent,
         ContractTypeCellRendererComponent,
         EditContractDialogComponent,
+        DeleteActionCellRendererComponent,
+        ContractStatusCellRendererComponent
     ],
     imports: [
         BrowserModule,
@@ -42,6 +46,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatIconModule,
         MatDialogModule,
         MatToolbarModule,
+        MatIconModule
     ],
     providers: [],
     bootstrap: [AppComponent],

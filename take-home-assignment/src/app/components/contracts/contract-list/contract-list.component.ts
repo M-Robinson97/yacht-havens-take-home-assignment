@@ -5,6 +5,9 @@ import { ColDef, GridApi, GridOptions, GridReadyEvent, RowDataChangedEvent } fro
 import { ContractTypeCellRendererComponent } from '../cell-renderers/contract-type-cell-renderer/contract-type-cell-renderer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-contract-dialog.component';
+import { DeleteActionCellRendererComponent } from '../cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
+import { DateService } from 'src/app/services/date.service';
+import { ContractStatusCellRendererComponent } from '../cell-renderers/contract-status-cell-renderer/contract-status-cell-renderer.component';
 
 @Component({
     selector: 'app-contract-list',
@@ -17,7 +20,9 @@ export class ContractListComponent implements OnInit {
     public gridOptions: GridOptions = this.getGridOptions();
     private gridApi!: GridApi;
 
-    constructor(private contractsService: ContractsService, private dialog: MatDialog) {}
+    constructor(private contractsService: ContractsService, private dialog: MatDialog,
+        private dateService: DateService
+    ) {}
 
     ngOnInit(): void {}
 
@@ -69,6 +74,11 @@ export class ContractListComponent implements OnInit {
                 suppressFilter: true,
             },
             {
+                field: 'contractStatus',
+                headerName: 'Contract Status',
+                cellRendererFramework: ContractStatusCellRendererComponent
+            },
+            {
                 field: 'customerName',
                 headerName: 'Customer Name',
                 valueGetter: 'data.customerName',
@@ -86,13 +96,42 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'startDate',
                 headerName: 'Start Date',
-                valueGetter: 'data.startDate',
+                valueGetter: (params) => {
+                    return this.dateService.formatDateToString(params.data.startDate)
+                },
             },
             {
                 field: 'endDate',
                 headerName: 'End Date',
-                valueGetter: 'data.endDate',
+                valueGetter: (params) => {
+                    return this.dateService.formatDateToString(params.data.endDate)
+                },
             },
+            {
+                field: 'durationInDays',
+                headerName: 'Duration in Days',
+                valueGetter: (params) => {
+                    const startDate = params.data.startDate;
+                    const endDate = params.data.endDate;
+                    return this.dateService.getContractDurationInDays(startDate, endDate);
+                }
+            },
+            {
+                field: 'totalIncVat',
+                headerName: 'Total Inc VAT',
+                valueGetter: (params) => {
+                    const contractCurrency = params.data.currency;
+                    const formattedVatAmount = Intl.NumberFormat('en-US').format(params.data.totalIncVat);
+                    return `${contractCurrency} ${formattedVatAmount}`
+                }
+            },
+            {
+                field: 'deleteAction',
+                headerName: 'Delete',
+                cellRendererFramework: DeleteActionCellRendererComponent,
+                suppressFilter: true,
+            }
+            
         ];
     }
 

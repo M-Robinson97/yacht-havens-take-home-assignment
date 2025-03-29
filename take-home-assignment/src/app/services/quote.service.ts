@@ -5,19 +5,20 @@ import { GetQuoteParams } from '../models/quote.model';
 import { ContractType } from '../enums/contract-type.enum';
 
 import * as moment from 'moment';
+import { DateService } from './date.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class QuoteService {
-    constructor() {}
+    constructor(private dateService: DateService) {}
 
     public getQuote(params: GetQuoteParams): Observable<number> {
         if (!this.isValidDateRange(params.startDate, params.endDate)) {
             return of(0).pipe(delay(500));
         }
 
-        const duration = this.getContractDuration(params.startDate, params.endDate);
+        const duration = this.dateService.getContractDurationInDays(params.startDate, params.endDate);
         const dailyRate = this.getDailyRate(params.contractType);
         const totalValue = this.calculateTotalValue(dailyRate, duration);
 
@@ -28,10 +29,6 @@ export class QuoteService {
         const start = moment(startDate);
         const end = moment(endDate);
         return start.isValid() && end.isValid() && end.isAfter(start, 'day');
-    }
-
-    private getContractDuration(startDate: string, endDate: string): number {
-        return moment(endDate).diff(moment(startDate), 'days');
     }
 
     private getDailyRate(contractType: ContractType): number {

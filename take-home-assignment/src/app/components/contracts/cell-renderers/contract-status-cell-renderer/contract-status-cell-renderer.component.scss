@@ -1,0 +1,15 @@
+.status-container {
+    display: flex;
+    align-items: center;
+}
+  
+.status-icon {
+    display: flex;
+    align-items: center;
+    background: none;       
+    border: none;               
+    outline: none;  
+    padding: 0;
+    cursor: pointer; 
+    margin-right: 8px;
+}
