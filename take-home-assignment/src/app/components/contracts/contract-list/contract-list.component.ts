@@ -95,18 +95,24 @@ export class ContractListComponent implements OnInit {
             {
                 field: 'startDate',
                 headerName: 'Start Date',
-                valueGetter: 'data.startDate',
+                valueGetter: (params) => {
+                    return new Date(params.data.startDate);
+                },
                 cellRenderer: (params) => {
-                    return this.dateService.formatDateToString(params.data.startDate)
-                }
+                    return this.dateService.formatDateToText(params.data.startDate)
+                },
+                filter: 'agDateColumnFilter'
             },
             {
                 field: 'endDate',
                 headerName: 'End Date',
-                valueGetter: 'data.endDate',
+                valueGetter: (params) => {
+                    return new Date(params.data.endDate);
+                }, 
                 cellRenderer: (params) => {
-                    return this.dateService.formatDateToString(params.data.endDate)
-                }
+                    return this.dateService.formatDateToText(params.data.endDate)
+                },
+                filter: 'agDateColumnFilter'
             },
             {
                 field: 'durationInDays',
@@ -115,17 +121,19 @@ export class ContractListComponent implements OnInit {
                     const startDate = params.data.startDate;
                     const endDate = params.data.endDate;
                     return this.dateService.getContractDurationInDays(startDate, endDate);
-                }
+                },
+                filter: 'agNumberColumnFilter'
             },
             {
                 field: 'totalIncVat',
                 headerName: 'Total Inc VAT',
-                valueGetter: 'data.totalIncVat',   
+                valueGetter:  'data.totalIncVat',   
                 cellRenderer: (params) => {
                     const contractCurrency = params.data.currency;
-                    const formattedVatAmount = Intl.NumberFormat('en-US').format(params.data.totalIncVat);
-                    return `${contractCurrency} ${formattedVatAmount}`
-                }
+                    const formattedVatAmount = Intl.NumberFormat('en-US', { style: 'currency', currency: contractCurrency}).format(params.data.totalIncVat);
+                    return formattedVatAmount;
+                },
+                filter: 'agNumberColumnFilter'
             },
             {
                 field: 'deleteAction',

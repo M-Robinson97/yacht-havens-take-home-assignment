@@ -12,7 +12,7 @@ export class DateService {
     return moment(endDate).diff(moment(startDate), 'days');
   }
 
-  public formatDateToString(date: Date): string {
+  public formatDateToText(date: string): string {
     const dateMoment = moment(date);
 
     if(!dateMoment.isValid()) return '';
