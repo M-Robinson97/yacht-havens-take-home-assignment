@@ -9,6 +9,7 @@ import { EnumView } from 'src/app/models/enum-view.model';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
+import { debounceTime, filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-edit-contract-dialog',
@@ -21,11 +22,10 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     public customerName!: string;
     public statuses$!: Observable<EnumView<ContractStatus>[]>;
     public contractTypes$!: Observable<EnumView<ContractType>[]>;
-    public form: FormGroup = this.fb.group({});
+    public form!: FormGroup;
+    public quote!: string;
 
-    private contractTypeSubscription: Subscription | undefined;
-    private startDateSubscription: Subscription | undefined;
-    private endDateSubscription: Subscription | undefined;
+    private formSubscription: Subscription | undefined;
     
     constructor(
         @Inject(MAT_DIALOG_DATA)
@@ -34,79 +34,70 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         private quoteService: QuoteService,
         private fb: FormBuilder, 
         private enumService: EnumService
-    ) {}
+    ) {
 
-    ngOnInit(): void {
         this.contractId = this.data.contract.id;
         this.customerName = this.data.contract.customerName;
         this.statuses$ = this.enumService.getContractStatuses();
         this.contractTypes$ = this.enumService.getContractTypes();
+        this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, this.data.contract.totalIncVat);
+    }
+
+    ngOnInit(): void {
         this.buildForm();
         this.subscribeToFormChanges();
     }
 
     private buildForm(): void {
-        //const formattedQuote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, this.quote);
-        //console.log(formattedQuote);
-        this.form.addControl('status', this.fb.control(this.data.contract.contractStatus));
-        this.form.addControl('contractType', this.fb.control(this.data.contract.contractType));
-        this.form.addControl('startDate', this.fb.control(this.data.contract.startDate));
-        this.form.addControl('endDate', this.fb.control(this.data.contract.endDate));
-        this.form.addControl('quote', this.fb.control(this.data.contract.totalIncVat));
+        this.form = this.fb.group({
+            status: new FormControl(this.data.contract.contractStatus),
+            contractType: new FormControl(this.data.contract.contractType),
+            startDate: new FormControl(this.data.contract.startDate),
+            endDate: new FormControl(this.data.contract.endDate),
+        });
     }
 
     private subscribeToFormChanges() {
-        this.contractTypeSubscription = (this.form.get('contractType') as FormControl).valueChanges.subscribe(value => {
-            this.recalculateQuote();
+        this.form.valueChanges
+        .pipe(
+            filter(() => {
+                const changedControls = Object.keys(this.form.controls).filter(key => this.form.get(key)?.dirty);
+                if(changedControls.includes('status')) {
+                    this.form.get('status')?.markAsPristine();
+                    return false;
+                }
+                return true;
+            })
+        )
+        .subscribe(() => {
+            this.getQuote();
         });
-        this.startDateSubscription = (this.form.get('startDate') as FormControl).valueChanges.subscribe(value => {
-            this.recalculateQuote();
-        });
-        this.endDateSubscription = (this.form.get('endDate') as FormControl).valueChanges.subscribe(value => {
-            this.recalculateQuote();
-        });
-    }
-
-    private recalculateQuote() {
-        this.getQuote();
-        
-    }
+      }
 
     private getQuote(): void {
-        const quoteParams = this.buildQuoteParams();
+        const quoteParams = this.form.value as GetQuoteParams;
+
         this.quoteService.getQuote(quoteParams).subscribe({
             next: (newQuote) => {
-              (this.form.get('startDate') as FormControl)?.patchValue(newQuote);
-              console.log(newQuote);
+                this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, newQuote);
+                console.log(this.quote);
             },
             error: (err) => {
-              console.error('Error fetching quote:', err);
+                console.error('Error fetching quote:', err);
             }
           });
     }
 
-    private buildQuoteParams(): GetQuoteParams{
-        return {
-            contractType: this.form.get('contractType')?.value ?? this.data.contract.contractType,
-            startDate: this.form.get('startDate')?.value ?? this.data.contract.startDate,
-            endDate: this.form.get('endDate')?.value ?? this.data.contract.endDate,
-        };
-    }
-
     public update(): void {
-        this.getQuote();
-
+        //this.getQuote();
         /*
-        NOTE: Quote has been successfully calculated and stored as getQuote
         NEED TO:
-        - DISPLAY QUOTE ON SCREEN WHEN UPDATING FIELD RATHER THAN ON CLICKING UPDATE
         - CLICKING UPDATE SHOULD UPDATE RELEVANT ROW
+        - VALIDATE DATES
         */
     }
 
     public ngOnDestroy() {
-        if (this.contractTypeSubscription) this.contractTypeSubscription.unsubscribe();
-        if (this.startDateSubscription) this.startDateSubscription.unsubscribe();
-        if (this.endDateSubscription) this.endDateSubscription.unsubscribe();
+        if (this.formSubscription) this.formSubscription.unsubscribe();
     }
 }
