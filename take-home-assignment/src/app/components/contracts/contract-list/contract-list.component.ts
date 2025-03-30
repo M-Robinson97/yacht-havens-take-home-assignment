@@ -47,6 +47,7 @@ export class ContractListComponent implements OnInit {
             headerHeight: 50,
             animateRows: true,
             context: { componentParent: this },
+            getRowNodeId: (params) => params.id,
             onGridReady: (params: GridReadyEvent) => this.onGridReady(params),
             onRowDataChanged: (params: RowDataChangedEvent) => params.api.sizeColumnsToFit(),
             onRowClicked: (event) => this.openEditDialog(event.data),

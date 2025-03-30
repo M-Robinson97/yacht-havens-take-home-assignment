@@ -117,7 +117,6 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
               console.error(err);
             }
           });
-        //this.getQuote();
         /*
         NEED TO:
         - VALIDATE DATES
