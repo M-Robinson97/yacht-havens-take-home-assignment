@@ -1,6 +1,6 @@
 <div mat-dialog-title>
     <mat-toolbar color="primary" class="dialog-toolbar">
-        <h1>Edit contract</h1>
+        <h1>Edit contract #{{ contractId }} ({{ customerName }})</h1>
         <button mat-button mat-dialog-close>
             <mat-icon>close</mat-icon>
         </button>
@@ -50,7 +50,7 @@
         <div class="form-row">
         <mat-label class="quote-label" for="quoteField">Quote</mat-label>
         <mat-form-field class="field-label" id="quoteField" appearance="outline">
-            <input matInput formControlName="quote" [disabled]="true">
+            <input matInput type="number" formControlName="quote" readonly>
         </mat-form-field>
         </div>
 
