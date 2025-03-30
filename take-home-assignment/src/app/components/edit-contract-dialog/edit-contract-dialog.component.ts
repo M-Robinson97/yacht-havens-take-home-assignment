@@ -6,12 +6,13 @@ import { Observable, Subscription } from 'rxjs';
 import { ContractStatus } from 'src/app/enums/contract-status.enum';
 import { ContractType } from 'src/app/enums/contract-type.enum';
 import { EnumView } from 'src/app/models/enum-view.model';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
 import { filter } from 'rxjs/operators';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { Contract } from 'src/app/models/contract.model';
+import { DateService } from 'src/app/services/date.service';
 
 @Component({
     selector: 'app-edit-contract-dialog',
@@ -26,6 +27,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     public contractTypes$!: Observable<EnumView<ContractType>[]>;
     public form!: FormGroup;
     public quote!: string;
+    public displayDateWarning: boolean = false;
 
     private formSubscription: Subscription | undefined;
     
@@ -35,6 +37,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         private dialogRef: MatDialogRef<EditContractDialogComponent>,
         private quoteService: QuoteService,
         private contractsService: ContractsService,
+        private dateService: DateService,
         private fb: FormBuilder, 
         private enumService: EnumService
     ) {
@@ -53,10 +56,10 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
 
     private buildForm(): void {
         this.form = this.fb.group({
-            status: new FormControl(this.data.contract.contractStatus),
-            contractType: new FormControl(this.data.contract.contractType),
-            startDate: new FormControl(this.data.contract.startDate),
-            endDate: new FormControl(this.data.contract.endDate),
+            status: [this.data.contract.contractStatus],
+            contractType: [this.data.contract.contractType],
+            startDate: [this.data.contract.startDate],
+            endDate: [this.data.contract.endDate]
         });
     }
 
@@ -79,6 +82,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
 
     private getQuote(): void {
         const quoteParams = this.form.value as GetQuoteParams;
+        this.displayDateWarning = !this.dateService.isValidDateRange(quoteParams.startDate, quoteParams.endDate);
 
         this.quoteService.getQuote(quoteParams).subscribe({
             next: (newQuote) => {
@@ -91,7 +95,6 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     }
 
     public update(): void {
-        // CHECK FORM VALIDATION
         const quote = this.quote;
         const cleanedQuote = quote.replace(/[^\d.]/g, '');
         const quoteNumber = parseFloat(cleanedQuote);
@@ -117,11 +120,6 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
               console.error(err);
             }
           });
-        /*
-        NEED TO:
-        - VALIDATE DATES
-        - STOP POPUP APPEARING ON DELETE
-        */
     }
 
     public ngOnDestroy() {

@@ -47,6 +47,8 @@
         </mat-form-field>
         </div>
 
+        <mat-error *ngIf="displayDateWarning">Warning: start date is after end date.</mat-error>
+
         <div class="form-row">
         <mat-label class="quote-label" for="quoteField">Quote</mat-label>
         <p class="field-label" type="number">{{quote}}</p>
