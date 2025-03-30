@@ -39,9 +39,19 @@
     margin-right: 10px;
 }
 
+.quote-label {
+    @extend .label;
+    font-weight: bold;
+}
+
 .field {
     align-items: right;
     flex: 1;
+}
+
+.field-label {
+    @extend .field;
+    font-weight: bold;
 }
 
 .form-row {

@@ -15,7 +15,6 @@
         <mat-label class="label" for="statusField">Status</mat-label>
         <mat-form-field class="field" id="statusField" appearance="outline">
             <mat-select placeholder="Choose an option..." formControlName="status">
-                <mat-option [value]="null">All</mat-option>
                 <mat-option *ngFor="let status of statuses$ | async" [value]="status.name">{{ status.name }}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -25,7 +24,6 @@
         <mat-label class="label" for="contractTypeField">Contract Type</mat-label>
         <mat-form-field class="field" id="contractTypeField" appearance="outline">
             <mat-select placeholder="Choose an option..." formControlName="contractType">
-                <mat-option [value]="null">All</mat-option>
                 <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -36,7 +34,7 @@
         <mat-form-field class="field" id="startDateField" appearance="outline">
             <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="mm/dd/yyyy">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker [disabled]="false"></mat-datepicker>
+            <mat-datepicker #startDatePicker></mat-datepicker>
         </mat-form-field>
         </div>
     
@@ -45,7 +43,14 @@
         <mat-form-field class="field" id="endDateField" appearance="outline">
             <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" placeholder="mm/dd/yyyy">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker [disabled]="false"></mat-datepicker>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+        </div>
+
+        <div class="form-row">
+        <mat-label class="quote-label" for="quoteField">Quote</mat-label>
+        <mat-form-field class="field-label" id="quoteField" appearance="outline">
+            <input matInput formControlName="quote" [disabled]="true">
         </mat-form-field>
         </div>
 
