@@ -50,7 +50,10 @@ export class ContractListComponent implements OnInit {
             getRowNodeId: (params) => params.id,
             onGridReady: (params: GridReadyEvent) => this.onGridReady(params),
             onRowDataChanged: (params: RowDataChangedEvent) => params.api.sizeColumnsToFit(),
-            onRowClicked: (event) => this.openEditDialog(event.data),
+            onCellClicked: (event) => {
+                if(event.column.getColId() === 'deleteAction') return;
+                this.openEditDialog(event.data);
+            },
         };
     }
 
@@ -65,6 +68,7 @@ export class ContractListComponent implements OnInit {
             width: '600px',
         });
         dialogRef.afterClosed().subscribe(result => {
+            if(!result) return;
             const rowNode = this.gridApi.getRowNode(result.id);
             rowNode.setData(
                 {
