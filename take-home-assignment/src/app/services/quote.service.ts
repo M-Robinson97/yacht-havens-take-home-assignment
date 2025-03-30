@@ -25,6 +25,10 @@ export class QuoteService {
         return of(totalValue).pipe(delay(1000));
     }
 
+    public formatQuoteWithCurrency(currency: string, quote: number): string {
+        return Intl.NumberFormat('en-Uk', { style: 'currency', currency: currency}).format(quote);
+    }
+
     private isValidDateRange(startDate: string, endDate: string): boolean {
         const start = moment(startDate);
         const end = moment(endDate);

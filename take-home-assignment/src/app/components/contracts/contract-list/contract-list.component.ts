@@ -8,6 +8,7 @@ import { EditContractDialogComponent } from '../../edit-contract-dialog/edit-con
 import { DeleteActionCellRendererComponent } from '../cell-renderers/delete-action-cell-renderer/delete-action-cell-renderer.component';
 import { DateService } from 'src/app/services/date.service';
 import { ContractStatusCellRendererComponent } from '../cell-renderers/contract-status-cell-renderer/contract-status-cell-renderer.component';
+import { QuoteService } from 'src/app/services/quote.service';
 
 @Component({
     selector: 'app-contract-list',
@@ -20,8 +21,10 @@ export class ContractListComponent implements OnInit {
     public gridOptions: GridOptions = this.getGridOptions();
     private gridApi!: GridApi;
 
-    constructor(private contractsService: ContractsService, private dialog: MatDialog,
-        private dateService: DateService
+    constructor(private contractsService: ContractsService, 
+        private dialog: MatDialog,
+        private dateService: DateService,
+        private quoteService: QuoteService
     ) {}
 
     ngOnInit(): void {}
@@ -122,8 +125,7 @@ export class ContractListComponent implements OnInit {
                 headerName: 'Total Inc VAT',
                 valueGetter:  'data.totalIncVat',   
                 cellRenderer: (params) => 
-                    Intl.NumberFormat('en-Uk', { style: 'currency', currency: params.data.currency}).format(params.data.totalIncVat),
-                filter: 'agNumberColumnFilter'
+                    this.quoteService.formatQuoteWithCurrency(params.data.currency, params.data.totalIncVat)
             },
             {
                 field: 'deleteAction',
