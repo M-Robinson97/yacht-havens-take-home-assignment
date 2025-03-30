@@ -14,7 +14,7 @@ export class QuoteService {
     constructor(private dateService: DateService) {}
 
     public getQuote(params: GetQuoteParams): Observable<number> {
-        if (!this.isValidDateRange(params.startDate, params.endDate)) {
+        if (!this.dateService.isValidDateRange(params.startDate, params.endDate)) {
             return of(0).pipe(delay(500));
         }
 
@@ -29,11 +29,6 @@ export class QuoteService {
         return Intl.NumberFormat('en-Uk', { style: 'currency', currency: currency}).format(quote);
     }
 
-    private isValidDateRange(startDate: string, endDate: string): boolean {
-        const start = moment(startDate);
-        const end = moment(endDate);
-        return start.isValid() && end.isValid() && end.isAfter(start, 'day');
-    }
 
     private getDailyRate(contractType: ContractType): number {
         switch (contractType) {
