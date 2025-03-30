@@ -32,10 +32,6 @@ export class Contract {
     constructor(init?: Partial<Contract>) {
         Object.assign(this, init);
     }
-
-    getDurationInDays(): number {
-        throw new Error('Not implemented');
-    }
 }
 
 export interface GetContractsParams {

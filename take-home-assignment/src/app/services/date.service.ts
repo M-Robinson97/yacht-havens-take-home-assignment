@@ -33,6 +33,13 @@ export class DateService {
     return firstDate.isValid() && secondDate.isValid() && firstDate.isSame(secondDate, 'day');
   }
 
+  public  isValidDateRange(startDate: string, endDate: string): boolean {
+    const start = moment(startDate);
+    const end = moment(endDate);
+    
+    return start.isValid() && end.isValid() && end.isAfter(start, 'day');
+  }
+
   private getDaySuffix(day: number) {
     if (day > 3 && day < 21) return 'th';
     switch (day % 10) {

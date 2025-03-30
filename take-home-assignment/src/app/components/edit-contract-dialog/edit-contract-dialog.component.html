@@ -1,6 +1,6 @@
 <div mat-dialog-title>
     <mat-toolbar color="primary" class="dialog-toolbar">
-        <h1>Edit contract</h1>
+        <h1>Edit contract #{{ contractId }} ({{ customerName }})</h1>
         <button mat-button mat-dialog-close>
             <mat-icon>close</mat-icon>
         </button>
@@ -8,7 +8,54 @@
 </div>
 
 <mat-dialog-content>
-    <p>Here is a form to edit a contract.</p>
+    <form [formGroup]="form" class="edit-contract-form">
+    <div class="stack-container">
+
+        <div class="form-row">
+        <mat-label class="label" for="statusField">Status</mat-label>
+        <mat-form-field class="field" id="statusField" appearance="outline">
+            <mat-select placeholder="Choose an option..." formControlName="status">
+                <mat-option *ngFor="let status of statuses$ | async" [value]="status.name">{{ status.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+        <mat-label class="label" for="contractTypeField">Contract Type</mat-label>
+        <mat-form-field class="field" id="contractTypeField" appearance="outline">
+            <mat-select placeholder="Choose an option..." formControlName="contractType">
+                <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+    
+        <div class="form-row">
+        <mat-label class="label" for="startDateField">Start Date</mat-label>
+        <mat-form-field class="field" id="startDateField" appearance="outline">
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+        </div>
+    
+        <div class="form-row">
+        <mat-label class="label" for="endDateField">End Date</mat-label>
+        <mat-form-field class="field" id="endDateField" appearance="outline">
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+        </div>
+
+        <mat-error *ngIf="displayDateWarning">Warning: start date is after end date.</mat-error>
+
+        <div class="form-row">
+        <mat-label class="quote-label" for="quoteField">Quote</mat-label>
+        <p class="field-label" type="number">{{quote}}</p>
+        </div>
+
+    </div>
+    </form>    
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">

@@ -26,7 +26,6 @@ export class DeleteActionCellRendererComponent implements ICellRendererAngularCo
     const gridApi = this.params.api;
     const rowNode = this.params.node;
 
-    // TODO: Upgrade 'confirm' dialogue to modal
     if (confirm(`Are you sure you want to delete the contract for ${this.params.data.customerName}?`)) {
       this.contractsService.deleteContract(this.params.data.id).subscribe({
         next: () => {
