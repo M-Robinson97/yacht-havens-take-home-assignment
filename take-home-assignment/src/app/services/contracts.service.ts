@@ -29,6 +29,29 @@ export class ContractsService {
         );
     }
 
+    public updateContract(updateContract: Contract): Observable<void> {
+        return of(null).pipe(
+            delay(1000),
+            map(() => {
+                const index = this.contracts.findIndex(contract => contract.id === updateContract.id);
+                if (index !== -1) {
+                    this.contracts[index] = updateContract;
+                } else {
+                    console.log(`Contract ID #${updateContract.id} not found.`);
+                }
+            })
+        );
+    }
+
+    public deleteContract(id: number): Observable<void> {
+        return of(null).pipe(
+            delay(1000),
+            map(() => {
+                this.contracts = this.contracts.filter((c) => c.id !== id);
+            })
+        );
+    }
+
     private filterByStatus(contract: Contract, status?: string): boolean {
         if (!status) return true;
         return contract.contractStatus === status;
@@ -49,14 +72,5 @@ export class ContractsService {
         if (!endDate) return true;
 
         return this.dateService.compareStringsByDay(endDate, contract.endDate);
-    }
-
-    public deleteContract(id: number): Observable<void> {
-        return of(null).pipe(
-            delay(1000),
-            map(() => {
-                this.contracts = this.contracts.filter((c) => c.id !== id);
-            })
-        );
     }
 }

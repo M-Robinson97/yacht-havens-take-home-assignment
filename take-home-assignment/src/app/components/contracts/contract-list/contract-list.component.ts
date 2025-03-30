@@ -59,10 +59,27 @@ export class ContractListComponent implements OnInit {
     }
 
     private openEditDialog(contract: Contract): void {
-        this.dialog.open(EditContractDialogComponent, {
+        const dialogRef = this.dialog.open(EditContractDialogComponent, {
             data: { contract },
             width: '600px',
         });
+        dialogRef.afterClosed().subscribe(result => {
+            const rowNode = this.gridApi.getRowNode(result.id);
+            rowNode.setData(
+                {
+                    id: result.id,
+                    contractType: result.contractType,
+                    contractStatus: result.contractStatus,
+                    customerName: result.customerName,
+                    startDate: result.startDate,
+                    endDate: result.endDate,
+                    boatName: result.boatName,
+                    location: result.location,
+                    totalIncVat: result.totalIncVat,
+                    currency: result.currency
+                }
+            );
+          });
     }
 
     private createColumnDefs(): ColDef[] {

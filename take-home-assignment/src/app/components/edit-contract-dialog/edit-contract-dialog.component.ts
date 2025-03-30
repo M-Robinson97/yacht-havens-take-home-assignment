@@ -10,6 +10,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
 import { filter } from 'rxjs/operators';
+import { ContractsService } from 'src/app/services/contracts.service';
+import { Contract } from 'src/app/models/contract.model';
 
 @Component({
     selector: 'app-edit-contract-dialog',
@@ -32,6 +34,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         private data: EditContractDialogData,
         private dialogRef: MatDialogRef<EditContractDialogComponent>,
         private quoteService: QuoteService,
+        private contractsService: ContractsService,
         private fb: FormBuilder, 
         private enumService: EnumService
     ) {
@@ -80,7 +83,6 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         this.quoteService.getQuote(quoteParams).subscribe({
             next: (newQuote) => {
                 this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, newQuote);
-                console.log(this.quote);
             },
             error: (err) => {
                 console.error('Error fetching quote:', err);
@@ -89,11 +91,37 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     }
 
     public update(): void {
+        // CHECK FORM VALIDATION
+        const quote = this.quote;
+        const cleanedQuote = quote.replace(/[^\d.]/g, '');
+        const quoteNumber = parseFloat(cleanedQuote);
+
+        const contractFields = 
+            {
+                contractType: this.form.get('contractType')?.value,
+                contractStatus: this.form.get('status')?.value,
+                startDate: this.form.get('startDate')?.value,
+                endDate: this.form.get('endDate')?.value,
+                totalIncVat: quoteNumber
+            } as Contract;
+        
+        const updatedContract = { ...this.data.contract, ...contractFields }
+
+        this.contractsService.updateContract(updatedContract).subscribe({
+            next: () => {
+                this.dialogRef.close(updatedContract);
+                alert('Contract updated');
+            },
+            error: (err) => {
+              alert('There was a problem updating the contract');
+              console.error(err);
+            }
+          });
         //this.getQuote();
         /*
         NEED TO:
-        - CLICKING UPDATE SHOULD UPDATE RELEVANT ROW
         - VALIDATE DATES
+        - STOP POPUP APPEARING ON DELETE
         */
     }
 
