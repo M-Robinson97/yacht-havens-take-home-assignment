@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DeleteActionCellRendererComponent } from './delete-action-cell-renderer.component';
 
 describe('DeleteActionCellRendererComponent', () => {

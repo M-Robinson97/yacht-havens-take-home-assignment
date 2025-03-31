@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { ICellRendererParams, IAfterGuiAttachedParams } from 'ag-grid-community';
+import { ICellRendererParams } from 'ag-grid-community';
 import { ContractStatus } from 'src/app/enums/contract-status.enum';
 
 @Component({
@@ -14,10 +14,12 @@ export class ContractStatusCellRendererComponent implements ICellRendererAngular
   public iconName: string = '';
   
   constructor() { }
+  
   refresh(params: any): boolean {
     this.setStatus(params.data.contractStatus);
     return true;
   }
+
   agInit(params: ICellRendererParams): void {
     this.setStatus(params.data.contractStatus);
   }

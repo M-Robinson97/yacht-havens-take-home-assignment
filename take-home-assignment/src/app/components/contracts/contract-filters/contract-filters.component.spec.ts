@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ContractFiltersComponent } from './contract-filters.component';
 
 describe('ContractFiltersComponent', () => {

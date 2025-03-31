@@ -14,7 +14,7 @@
         <div class="form-row">
         <mat-label class="label" for="statusField">Status</mat-label>
         <mat-form-field class="field" id="statusField" appearance="outline">
-            <mat-select placeholder="Choose an option..." formControlName="status">
+            <mat-select placeholder="Loading options..." formControlName="status">
                 <mat-option *ngFor="let status of statuses$ | async" [value]="status.name">{{ status.name }}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -23,7 +23,7 @@
         <div class="form-row">
         <mat-label class="label" for="contractTypeField">Contract Type</mat-label>
         <mat-form-field class="field" id="contractTypeField" appearance="outline">
-            <mat-select placeholder="Choose an option..." formControlName="contractType">
+            <mat-select placeholder="Loading options..." formControlName="contractType">
                 <mat-option *ngFor="let contractType of contractTypes$ | async" [value]="contractType.name">{{ contractType.name }}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -47,7 +47,8 @@
         </mat-form-field>
         </div>
 
-        <mat-error *ngIf="displayDateWarning">Warning: start date is after end date.</mat-error>
+        <mat-error *ngIf="displayInvalidDateWarning">Warning: start date cannot be after end date.</mat-error>
+        <mat-error *ngIf="displayDatesRequiredWarning">Warning: both start  date and end date are required.</mat-error>
 
         <div class="form-row">
         <mat-label class="quote-label" for="quoteField">Quote</mat-label>
@@ -60,5 +61,5 @@
 
 <mat-dialog-actions class="dialog-actions">
     <button mat-stroked-button color="basic" type="button" mat-dialog-close>Close</button>
-    <button mat-flat-button color="primary" class="primary-button" type="button" (click)="update()">Update</button>
+    <button mat-flat-button color="primary" class="primary-button" type="button" (click)="update()" [disabled]="!form.valid">Update</button>
 </mat-dialog-actions>

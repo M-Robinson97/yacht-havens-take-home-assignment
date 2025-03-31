@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ContractStatusCellRendererComponent } from './contract-status-cell-renderer.component';
 
 describe('ContractStatusCellRendererComponent', () => {
