@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ContractStatus } from 'src/app/enums/contract-status.enum';
 import { ContractType } from 'src/app/enums/contract-type.enum';
 import { EnumView } from 'src/app/models/enum-view.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
 import { filter } from 'rxjs/operators';
@@ -27,7 +27,8 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     public contractTypes$!: Observable<EnumView<ContractType>[]>;
     public form!: FormGroup;
     public quote!: string;
-    public displayDateWarning: boolean = false;
+    public displayInvalidDateWarning: boolean = false;
+    public displayDatesRequiredWarning: boolean = false;
 
     private formSubscription: Subscription | undefined;
     
@@ -54,44 +55,8 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         this.subscribeToFormChanges();
     }
 
-    private buildForm(): void {
-        this.form = this.fb.group({
-            status: [this.data.contract.contractStatus],
-            contractType: [this.data.contract.contractType],
-            startDate: [this.data.contract.startDate],
-            endDate: [this.data.contract.endDate]
-        });
-    }
-
-    private subscribeToFormChanges() {
-        this.form.valueChanges
-        .pipe(
-            filter(() => {
-                const changedControls = Object.keys(this.form.controls).filter(key => this.form.get(key)?.dirty);
-                if(changedControls.includes('status')) {
-                    this.form.get('status')?.markAsPristine();
-                    return false;
-                }
-                return true;
-            })
-        )
-        .subscribe(() => {
-            this.getQuote();
-        });
-      }
-
-    private getQuote(): void {
-        const quoteParams = this.form.value as GetQuoteParams;
-        this.displayDateWarning = !this.dateService.isValidDateRange(quoteParams.startDate, quoteParams.endDate);
-
-        this.quoteService.getQuote(quoteParams).subscribe({
-            next: (newQuote) => {
-                this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, newQuote);
-            },
-            error: (err) => {
-                console.error('Error fetching quote:', err);
-            }
-          });
+    ngOnDestroy() {
+        if (this.formSubscription) this.formSubscription.unsubscribe();
     }
 
     public update(): void {
@@ -122,7 +87,48 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
           });
     }
 
-    public ngOnDestroy() {
-        if (this.formSubscription) this.formSubscription.unsubscribe();
+    private buildForm(): void {
+        this.form = this.fb.group({
+            status: [this.data.contract.contractStatus],
+            contractType: [this.data.contract.contractType],
+            startDate: [this.data.contract.startDate, [Validators.required]],
+            endDate: [this.data.contract.endDate, [Validators.required]]
+        });
+    }
+
+    private subscribeToFormChanges() {
+        this.form.valueChanges
+        .pipe(
+            filter(() => {
+                const changedControls = Object.keys(this.form.controls).filter(key => this.form.get(key)?.dirty);
+                if(changedControls.includes('status')) {
+                    this.form.get('status')?.markAsPristine();
+                    return false;
+                }
+                return true;
+            })
+        )
+        .subscribe(() => {
+            this.getQuote();
+        });
+      }
+
+    private getQuote(): void {
+        const quoteParams = this.form.value as GetQuoteParams;
+        this.displayDatesRequiredWarning = this.form.get('startDate')?.errors?.['required'] || this.form.get('endDate')?.errors?.['required'];
+        if(this.displayDatesRequiredWarning) {
+            this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, 0);
+            return;
+        };
+        this.displayInvalidDateWarning = !this.dateService.isValidDateRange(quoteParams.startDate, quoteParams.endDate);
+
+        this.quoteService.getQuote(quoteParams).subscribe({
+            next: (newQuote) => {
+                this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, newQuote);
+            },
+            error: (err) => {
+                console.error('Error fetching quote:', err);
+            }
+          });
     }
 }
