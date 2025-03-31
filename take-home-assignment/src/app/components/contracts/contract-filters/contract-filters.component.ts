@@ -32,10 +32,12 @@ export class ContractFiltersComponent implements OnInit {
     }
 
     private addControls(): void {
-        this.form.addControl('status', this.fb.control(null));
-        this.form.addControl('contractType', this.fb.control(null));
-        this.form.addControl('startDate', this.fb.control(null));
-        this.form.addControl('endDate', this.fb.control(null));
+        this.form = this.fb.group({
+            status: [null],
+            contractType: [null],
+            startDate: [null],
+            endDate: [null]
+        });
     }
 
     public applyFilters(): void {
