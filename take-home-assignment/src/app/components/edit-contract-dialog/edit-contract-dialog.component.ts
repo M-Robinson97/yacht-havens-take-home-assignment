@@ -9,7 +9,7 @@ import { EnumView } from 'src/app/models/enum-view.model';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
-import { filter } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { Contract } from 'src/app/models/contract.model';
 import { DateService } from 'src/app/services/date.service';
@@ -100,6 +100,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
     private subscribeToFormChanges() {
         this.form.valueChanges
         .pipe(
+            debounceTime(500),
             filter(() => {
                 const changedControls = Object.keys(this.form.controls).filter(key => this.form.get(key)?.dirty);
                 if(changedControls.includes('status')) {
