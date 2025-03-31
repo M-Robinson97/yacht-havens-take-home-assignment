@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ContractStatus } from 'src/app/enums/contract-status.enum';
 import { ContractType } from 'src/app/enums/contract-type.enum';
 import { EnumView } from 'src/app/models/enum-view.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { EnumService } from 'src/app/services/enum.service';
 import { GetQuoteParams } from 'src/app/models/quote.model';
 import { filter } from 'rxjs/operators';
@@ -93,7 +93,8 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
             contractType: [this.data.contract.contractType],
             startDate: [this.data.contract.startDate, [Validators.required]],
             endDate: [this.data.contract.endDate, [Validators.required]]
-        });
+        },{ validators: [dateRangeValidator(this.dateService)] }
+    );
     }
 
     private subscribeToFormChanges() {
@@ -120,7 +121,7 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
             this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, 0);
             return;
         };
-        this.displayInvalidDateWarning = !this.dateService.isValidDateRange(quoteParams.startDate, quoteParams.endDate);
+        this.displayInvalidDateWarning = this.form.errors?.invalidDateRange;
 
         this.quoteService.getQuote(quoteParams).subscribe({
             next: (newQuote) => {
@@ -130,5 +131,17 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
                 console.error('Error fetching quote:', err);
             }
           });
-    }
+    }  
+}
+
+function dateRangeValidator(dateService: DateService): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const form = control as FormGroup;
+        const startDate = form.get('startDate')?.value;
+        const endDate = form.get('endDate')?.value;
+        if(!dateService.isValidDateRange(startDate, endDate)) {
+            return { 'invalidDateRange': true };
+        };
+        return null;
+      };
 }
