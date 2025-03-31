@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ContractTypeCellRendererComponent } from './contract-type-cell-renderer.component';
 
 describe('ContractTypeCellRendererComponent', () => {
