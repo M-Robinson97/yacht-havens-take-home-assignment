@@ -84,7 +84,7 @@ export class ContractListComponent implements OnInit {
                     currency: result.currency
                 }
             );
-          });
+        });
     }
 
     private createColumnDefs(): ColDef[] {
