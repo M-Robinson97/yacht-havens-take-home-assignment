@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { EditContractDialogComponent } from './edit-contract-dialog.component';
 
 describe('EditContractDialogComponent', () => {

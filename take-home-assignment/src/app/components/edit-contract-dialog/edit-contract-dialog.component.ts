@@ -42,7 +42,6 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
         private fb: FormBuilder, 
         private enumService: EnumService
     ) {
-
         this.contractId = this.data.contract.id;
         this.customerName = this.data.contract.customerName;
         this.statuses$ = this.enumService.getContractStatuses();
@@ -116,14 +115,14 @@ export class EditContractDialogComponent implements OnInit, OnDestroy {
       }
 
     private getQuote(): void {
-        const quoteParams = this.form.value as GetQuoteParams;
         this.displayDatesRequiredWarning = this.form.get('startDate')?.errors?.['required'] || this.form.get('endDate')?.errors?.['required'];
         if(this.displayDatesRequiredWarning) {
             this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, 0);
             return;
         };
         this.displayInvalidDateWarning = this.form.errors?.invalidDateRange;
-
+        
+        const quoteParams = this.form.value as GetQuoteParams;
         this.quoteService.getQuote(quoteParams).subscribe({
             next: (newQuote) => {
                 this.quote = this.quoteService.formatQuoteWithCurrency(this.data.contract.currency, newQuote);
