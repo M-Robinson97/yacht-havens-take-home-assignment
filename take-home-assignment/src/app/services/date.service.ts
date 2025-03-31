@@ -49,5 +49,4 @@ export class DateService {
       default: return 'th';
     }
   }
-  
 }
