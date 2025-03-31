@@ -3,8 +3,6 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { GetQuoteParams } from '../models/quote.model';
 import { ContractType } from '../enums/contract-type.enum';
-
-import * as moment from 'moment';
 import { DateService } from './date.service';
 
 @Injectable({
@@ -28,7 +26,6 @@ export class QuoteService {
     public formatQuoteWithCurrency(currency: string, quote: number): string {
         return Intl.NumberFormat('en-Uk', { style: 'currency', currency: currency}).format(quote);
     }
-
 
     private getDailyRate(contractType: ContractType): number {
         switch (contractType) {
